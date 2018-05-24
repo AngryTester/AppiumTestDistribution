@@ -49,7 +49,7 @@ public final class AppiumParallelMethodTestListener
         try {
             reportEventManager.getReportEventJson(AppiumDeviceManager.getAppiumDevice(),
                     "Started", method.getTestMethod().getMethodName(), "UnKnown");
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         SkipIf skip = getSkipIf(method);
@@ -100,7 +100,7 @@ public final class AppiumParallelMethodTestListener
                 reportEventManager.getReportEventJson(AppiumDeviceManager.getAppiumDevice(),
                         "Completed", method.getTestMethod().getMethodName(),
                         getStatus(testResult));
-            } catch (JsonProcessingException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             ExtentManager.getExtent().flush();

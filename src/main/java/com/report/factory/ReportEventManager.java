@@ -4,6 +4,8 @@ import com.appium.utils.AppiumDevice;
 import com.events.TestEventBus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.util.JSON;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +26,9 @@ public class ReportEventManager {
                 .writeValueAsString(appiumDevice);
         ja.put(value);
         obj.put("deviceinfo", JSON.parse(value.replace("/\r?\n|\r/g", "")));
-        TestEventBus.getInstance().publish(obj);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String jsonOutput = gson.toJson(obj);
+        System.out.println(jsonOutput);
+        TestEventBus.getInstance().publish(jsonOutput);
     }
 }

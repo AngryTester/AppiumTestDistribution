@@ -3,7 +3,7 @@ package com.appium.utils;
 import com.appium.manager.AppiumManagerFactory;
 import com.appium.manager.IAppiumManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.events.DeviceEventBus;
+import com.events.DeviceEventBus;
 import com.thoughtworks.device.Device;
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -7,6 +7,7 @@ import com.aventstack.extentreports.Status;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.report.factory.ExtentManager;
 import com.report.factory.ExtentTestManager;
+import com.report.factory.ReportEventManager;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.IRetryAnalyzer;
@@ -28,6 +29,7 @@ public final class AppiumParallelMethodTestListener
     private AppiumServerManager appiumServerManager;
     private String testDescription = "";
     private AppiumDriverManager appiumDriverManager;
+    private ReportEventManager reportEventManager;
 
     public AppiumParallelMethodTestListener() throws Exception {
         try {
@@ -36,6 +38,7 @@ public final class AppiumParallelMethodTestListener
             prop = ConfigFileManager.getInstance();
             deviceAllocationManager = DeviceAllocationManager.getInstance();
             appiumDriverManager = new AppiumDriverManager();
+            reportEventManager = new ReportEventManager();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,6 +46,12 @@ public final class AppiumParallelMethodTestListener
 
     @Override
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+        try {
+            reportEventManager.getReportEventJson(AppiumDeviceManager.getAppiumDevice(),
+                    "Started", method.getTestMethod().getMethodName(), "UnKnown");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         SkipIf skip = getSkipIf(method);
         isSkip(skip);
 
@@ -87,6 +96,13 @@ public final class AppiumParallelMethodTestListener
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            try {
+                reportEventManager.getReportEventJson(AppiumDeviceManager.getAppiumDevice(),
+                        "Completed", method.getTestMethod().getMethodName(),
+                        getStatus(testResult));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             ExtentManager.getExtent().flush();
             try {
                 deviceAllocationManager.freeDevice();
@@ -170,4 +186,18 @@ public final class AppiumParallelMethodTestListener
             e.printStackTrace();
         }
     }
+
+    private String getStatus(ITestResult result) {
+        switch (result.getStatus()) {
+            case ITestResult.SUCCESS:
+                return "Pass";
+            case ITestResult.FAILURE:
+                return "Fail";
+            case ITestResult.SKIP:
+                return "Skip";
+            default:
+                throw new RuntimeException("Invalid status");
+        }
+    }
+
 }

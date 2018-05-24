@@ -3,22 +3,14 @@ package com.appium.manager;
 import com.appium.utils.AppiumDevice;
 import com.appium.utils.DevicesByHost;
 import com.appium.utils.HostMachineDeviceManager;
-import com.appium.utils.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yunusmete.stf.api.STFService;
 import com.github.yunusmete.stf.model.DeviceBody;
 import com.github.yunusmete.stf.rest.DeviceResponse;
-import com.test.events.DeviceEventBus;
-import org.json.JSONObject;
+import com.events.DeviceEventBus;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Logger;
 
